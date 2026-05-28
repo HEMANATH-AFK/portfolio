@@ -10,32 +10,43 @@ interface ImageSequencePlayerProps {
   onLoadComplete: () => void;
 }
 
-const TOTAL_FRAMES = 300;
-
 export default function ImageSequencePlayer({ scrollProgress, fadeOutProgress, onLoadComplete }: ImageSequencePlayerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [loadedCount, setLoadedCount] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const imagesRef = useRef<HTMLImageElement[]>([]);
+  const [totalFrames, setTotalFrames] = useState(300);
 
-  // Preload all 300 frames
+  // Detect mobile size on mount and set total frames to load (215 for mobile, 300 for desktop)
+  useEffect(() => {
+    setTotalFrames(window.innerWidth < 768 ? 215 : 300);
+  }, []);
+
+  // Preload all frames
   useEffect(() => {
     let loaded = 0;
     const images: HTMLImageElement[] = [];
+    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+
+    if (!cloudName && typeof window !== "undefined") {
+      console.warn("NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME is not defined. Falling back to local assets.");
+    }
 
     // Helper to format frame numbers: e.g. 1 -> "001", 12 -> "012", 100 -> "100"
     const formatFrameNumber = (num: number) => {
       return String(num).padStart(3, "0");
     };
 
-    for (let i = 1; i <= TOTAL_FRAMES; i++) {
+    for (let i = 1; i <= totalFrames; i++) {
       const img = new Image();
-      // Next.js serves public folder statically
-      img.src = `/animation-pics/ezgif-frame-${formatFrameNumber(i)}.jpg`;
+      // Deliver optimized formats (WebP/AVIF) and cache via Cloudinary if cloudName is set, otherwise fall back to local assets
+      img.src = cloudName
+        ? `https://res.cloudinary.com/${cloudName}/image/upload/f_auto,q_auto/portfolio/animation-pics/ezgif-frame-${formatFrameNumber(i)}.jpg`
+        : `/animation-pics/ezgif-frame-${formatFrameNumber(i)}.jpg`;
       img.onload = () => {
         loaded++;
         setLoadedCount(loaded);
-        if (loaded === TOTAL_FRAMES) {
+        if (loaded === totalFrames) {
           setIsLoaded(true);
           onLoadComplete();
         }
@@ -44,7 +55,7 @@ export default function ImageSequencePlayer({ scrollProgress, fadeOutProgress, o
         // Fallback or retry on error
         loaded++;
         setLoadedCount(loaded);
-        if (loaded === TOTAL_FRAMES) {
+        if (loaded === totalFrames) {
           setIsLoaded(true);
           onLoadComplete();
         }
@@ -58,7 +69,7 @@ export default function ImageSequencePlayer({ scrollProgress, fadeOutProgress, o
       // Clean up references
       imagesRef.current = [];
     };
-  }, [onLoadComplete]);
+  }, [totalFrames, onLoadComplete]);
 
   // Handle canvas drawing on resize and scroll
   useEffect(() => {
@@ -71,10 +82,10 @@ export default function ImageSequencePlayer({ scrollProgress, fadeOutProgress, o
     if (!ctx) return;
 
     const drawFrame = () => {
-      // Map scroll progress (0.0 - 1.0) to frame index (0 - 299)
+      // Map scroll progress (0.0 - 1.0) to frame index (0 - totalFrames - 1)
       const frameIndex = Math.min(
-        TOTAL_FRAMES - 1,
-        Math.max(0, Math.floor(scrollProgress * (TOTAL_FRAMES - 1)))
+        totalFrames - 1,
+        Math.max(0, Math.floor(scrollProgress * (totalFrames - 1)))
       );
 
       const img = imagesRef.current[frameIndex];
@@ -90,17 +101,16 @@ export default function ImageSequencePlayer({ scrollProgress, fadeOutProgress, o
       canvas.height = height * dpr;
       ctx.scale(dpr, dpr);
 
-      // Perform "object-fit: cover" logic on canvas
-      // Crop 5% from left/right/top, and 11% from the bottom to cut out the Gemini watermark
-      const cropLeft = 0.05;
-      const cropRight = 0.05;
-      const cropTop = 0.05;
-      const cropBottom = 0.11;
+      // Draw the full image without cropping
+      const cropLeft = 0;
+      const cropRight = 0;
+      const cropTop = 0;
+      const cropBottom = 0;
 
-      const sx = img.width * cropLeft;
-      const sy = img.height * cropTop;
-      const sWidth = img.width * (1 - cropLeft - cropRight);
-      const sHeight = img.height * (1 - cropTop - cropBottom);
+      const sx = 0;
+      const sy = 0;
+      const sWidth = img.width;
+      const sHeight = img.height;
 
       const imgRatio = sWidth / sHeight;
       const canvasRatio = width / height;
@@ -134,9 +144,9 @@ export default function ImageSequencePlayer({ scrollProgress, fadeOutProgress, o
     return () => {
       window.removeEventListener("resize", drawFrame);
     };
-  }, [isLoaded, scrollProgress]);
+  }, [isLoaded, scrollProgress, totalFrames]);
 
-  const progressPercent = Math.round((loadedCount / TOTAL_FRAMES) * 100);
+  const progressPercent = Math.round((loadedCount / totalFrames) * 100);
 
   return (
     <div 

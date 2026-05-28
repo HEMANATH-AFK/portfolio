@@ -15,7 +15,11 @@ import {
   Layers,
   Database,
   Terminal,
-  Compass
+  Compass,
+  BookOpen,
+  FileText,
+  Award,
+  ExternalLink
 } from "lucide-react";
 
 export default function HtmlOverlay({ fadeOutProgress }: { fadeOutProgress: number }) {
@@ -25,6 +29,16 @@ export default function HtmlOverlay({ fadeOutProgress }: { fadeOutProgress: numb
   const [submitted, setSubmitted] = useState(false);
   const [activeTab, setActiveTab] = useState<"features" | "stack" | "breakdown">("features");
   const [activeProjectIdx, setActiveProjectIdx] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -87,13 +101,13 @@ export default function HtmlOverlay({ fadeOutProgress }: { fadeOutProgress: numb
 
   return (
     <div className="relative w-full z-10 select-none">
-      {/* Spacer to push content down after the 3D scroll sequence */}
-      <div className="h-[400vh] w-full pointer-events-none" />
+      {/* Spacer to push content down after the 3D scroll sequence (1 viewport height on mobile, 4 viewports on desktop) */}
+      <div className="h-[100vh] md:h-[400vh] w-full pointer-events-none" />
 
       {/* Main DOM scroll sections container */}
       <main
         className="w-full max-w-6xl mx-auto px-6 py-20 flex flex-col gap-32 md:gap-48 bg-transparent"
-        style={{ opacity: fadeOutProgress }}
+        style={{ opacity: isMobile ? 1 : fadeOutProgress }}
       >
 
         {/* ================= ABOUT ME SECTION ================= */}
@@ -179,6 +193,68 @@ export default function HtmlOverlay({ fadeOutProgress }: { fadeOutProgress: numb
           </motion.div>
         </section>
 
+        {/* ================= MOBILE TECH STACK SECTION (Only visible on mobile) ================= */}
+        <section id="tech-stack-mobile" className="block md:hidden scroll-mt-24">
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            className="flex flex-col gap-8"
+          >
+            {/* Header */}
+            <motion.div variants={itemVariants} className="flex flex-col gap-2">
+              <span className="text-[10px] uppercase font-bold tracking-widest text-accent/80 font-mono">
+                Technology
+              </span>
+              <h2 className="text-4xl font-serif font-normal text-foreground leading-tight">
+                My Stack
+              </h2>
+              <p className="text-xs text-foreground/75 leading-relaxed max-w-xl">
+                A curated ecosystem of tools and technologies I use to craft high-performance digital experiences, from pixel-perfect frontends to intelligent backend systems.
+              </p>
+            </motion.div>
+
+            {/* Categories */}
+            <motion.div variants={itemVariants} className="flex flex-col gap-6">
+              {[
+                {
+                  title: "FRONTEND",
+                  skills: ["React.js", "Next.js", "TypeScript", "JavaScript", "Tailwind CSS", "HTML5 & CSS3", "Redux", "Bootstrap"]
+                },
+                {
+                  title: "BACKEND & DATABASE",
+                  skills: ["Node.js", "Express.js", "MongoDB", "MySQL", "REST APIs"]
+                },
+                {
+                  title: "AI & 3D",
+                  skills: ["Gemini API", "Prompt Engineering", "Three.js", "React Three Fiber", "Lenis Scroll"]
+                },
+                {
+                  title: "TOOLS & WORKFLOW",
+                  skills: ["Git & GitHub", "VS Code", "Postman", "MongoDB Compass"]
+                }
+              ].map((category) => (
+                <div key={category.title} className="flex flex-col gap-3">
+                  <h3 className="text-[9px] font-extrabold tracking-widest text-accent uppercase font-mono">
+                    {category.title}
+                  </h3>
+                  <div className="flex flex-wrap gap-2.5">
+                    {category.skills.map((skill) => (
+                      <div
+                        key={skill}
+                        className="px-4 py-2 bg-white/95 border border-white/50 text-foreground text-[11px] font-bold rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.04)] flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95"
+                      >
+                        {skill}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+          </motion.div>
+        </section>
+
         {/* ================= FEATURED PROJECTS SECTION ================= */}
         <section id="projects" className="scroll-mt-24">
           <motion.div
@@ -239,7 +315,7 @@ export default function HtmlOverlay({ fadeOutProgress }: { fadeOutProgress: numb
                 }[activeProj.iconName] || Layers;
 
                 return (
-                  <motion.div 
+                  <motion.article 
                     key={activeProjectIdx}
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -365,7 +441,7 @@ export default function HtmlOverlay({ fadeOutProgress }: { fadeOutProgress: numb
 
                     </div>
 
-                  </motion.div>
+                  </motion.article>
                 );
               })()}
             </motion.div>
@@ -467,6 +543,183 @@ export default function HtmlOverlay({ fadeOutProgress }: { fadeOutProgress: numb
           </motion.div>
         </section>
 
+        {/* ================= RESEARCH & PUBLICATIONS SECTION ================= */}
+        <section id="research" className="scroll-mt-24">
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            className="flex flex-col gap-10"
+          >
+            {/* Section Header */}
+            <motion.div variants={itemVariants} className="flex flex-col gap-3">
+              <div className="inline-flex items-center gap-2 bg-surface/80 px-3 py-1.5 rounded-full border border-white/50 w-fit">
+                <BookOpen size={14} className="text-accent" />
+                <span className="text-xs font-semibold uppercase tracking-wider text-accent">Research</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
+                Research & Publications
+              </h2>
+              <p className="text-xs md:text-sm text-foreground/80 max-w-2xl leading-relaxed mt-1 font-medium">
+                Exploring intelligent systems, immersive engineering, and scalable digital experiences through technical research and experimental development.
+              </p>
+            </motion.div>
+
+            {/* Asymmetric Editorial Grid */}
+            <motion.div 
+              variants={itemVariants} 
+              className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch"
+            >
+              {/* Publication Details / Abstract (Left Column - 6 Cols) */}
+              <div className="lg:col-span-6 flex flex-col justify-between gap-6">
+                <div className="flex flex-col gap-6">
+                  <div className="flex flex-col gap-2">
+                    <span className="text-[10px] font-bold tracking-widest text-accent uppercase font-mono">
+                      Featured Publication — International Journal
+                    </span>
+                    <h3 className="text-2xl md:text-3xl font-bold text-foreground leading-tight tracking-tight">
+                      AI-Powered Smart Recruitment System for Intelligent Candidate Evaluation and Hiring Optimization
+                    </h3>
+                  </div>
+
+                  <div className="flex flex-wrap gap-4 text-xs">
+                    <div className="bg-surface/50 border border-white/30 rounded-xl px-4 py-2 flex flex-col shadow-sm">
+                      <span className="text-[9px] uppercase tracking-wider text-accent font-semibold">Journal</span>
+                      <span className="font-bold text-foreground text-[11px]">Research Journal of Wave</span>
+                    </div>
+                    <div className="bg-surface/50 border border-white/30 rounded-xl px-4 py-2 flex flex-col shadow-sm">
+                      <span className="text-[9px] uppercase tracking-wider text-accent font-semibold">Status</span>
+                      <span className="font-bold text-foreground text-[11px]">Published</span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-3">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-accent">Abstract</h4>
+                    <p className="text-xs md:text-sm text-foreground/80 leading-relaxed font-normal">
+                      This research explores the development of an AI-powered smart recruitment platform capable of improving candidate evaluation workflows, intelligent hiring optimization, and scalable recruitment interaction systems through modern full-stack engineering and intelligent automation pipelines.
+                    </p>
+                  </div>
+
+                  <div className="flex flex-col gap-3">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-accent">Research Focus</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {[
+                        "Artificial Intelligence",
+                        "Smart Recruitment Systems",
+                        "Intelligent Candidate Evaluation",
+                        "Full Stack Engineering",
+                        "Scalable Web Architecture"
+                      ].map((focus, idx) => (
+                        <span 
+                          key={idx} 
+                          className="bg-surface/60 hover:bg-white/40 border border-white/40 rounded-full px-3 py-1 text-[10px] font-medium text-foreground transition-colors duration-200"
+                        >
+                          {focus}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Premium Pebble-style Buttons */}
+                <div className="flex flex-wrap gap-3 mt-6">
+                  <motion.a
+                    whileHover={{ scale: 1.03, y: -2 }}
+                    whileTap={{ scale: 0.98 }}
+                    href="https://rjwave.org/jaafr/viewpaperforall.php?paper=JAAFR2605325"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-2 px-4 py-2.5 bg-surface/80 hover:bg-foreground hover:text-background border border-white/55 hover:border-transparent text-foreground rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer"
+                  >
+                    <ExternalLink size={12} />
+                    View Journal
+                  </motion.a>
+                  <motion.a
+                    whileHover={{ scale: 1.03, y: -2 }}
+                    whileTap={{ scale: 0.98 }}
+                    href="https://drive.google.com/file/d/1gxamD6-yzWnMuF9EjgyKGcftZ0PVswPI/view?usp=sharing"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-2 px-4 py-2.5 bg-surface/80 hover:bg-foreground hover:text-background border border-white/55 hover:border-transparent text-foreground rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer"
+                  >
+                    <FileText size={12} />
+                    Read Publication
+                  </motion.a>
+                  <motion.a
+                    whileHover={{ scale: 1.03, y: -2 }}
+                    whileTap={{ scale: 0.98 }}
+                    href="https://drive.google.com/file/d/1PI0_iMvEe9n6RplGCgz68-ihsdUjNN-s/view?usp=sharing"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-2 px-4 py-2.5 bg-surface/80 hover:bg-foreground hover:text-background border border-white/55 hover:border-transparent text-foreground rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer"
+                  >
+                    <Award size={12} />
+                    View Certificate
+                  </motion.a>
+                </div>
+              </div>
+
+              {/* Cinematic Interactive Card (Right Column - 6 Cols) */}
+              <div className="lg:col-span-6 flex items-center justify-center">
+                <motion.div
+                  whileHover={{ 
+                    y: -6,
+                    scale: 1.01,
+                    boxShadow: "0 20px 40px rgba(0, 0, 0, 0.08)"
+                  }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  className="w-full h-full min-h-[320px] matte-card p-6 md:p-8 flex flex-col justify-between border border-white/50 relative overflow-hidden group select-none"
+                >
+                  {/* Subtle enhanced lighting overlay on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/5 to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                  
+                  {/* Card top branding */}
+                  <div className="flex justify-between items-start z-10">
+                    <div className="flex flex-col">
+                      <span className="text-[9px] uppercase tracking-widest text-accent font-bold font-mono">
+                        Archive No.
+                      </span>
+                      <span className="text-xs font-bold text-foreground font-mono">
+                        AR-2605325
+                      </span>
+                    </div>
+                    <div className="bg-surface/80 px-2.5 py-1 rounded-md border border-white/60 text-[9px] font-mono font-bold text-accent uppercase tracking-wider">
+                      JAAFR INDEX
+                    </div>
+                  </div>
+
+                  {/* Curated visual presentation element inside the card */}
+                  <div className="my-8 flex flex-col gap-2 z-10">
+                    <span className="text-accent text-[9px] uppercase tracking-wider font-bold">Research Title</span>
+                    <h3 className="text-xl font-bold text-foreground leading-snug tracking-tight font-sans">
+                      AI-Powered Smart Recruitment System for Intelligent Candidate Evaluation
+                    </h3>
+                    <div className="w-12 h-[2px] bg-accent/30 mt-3 group-hover:w-20 transition-all duration-500" />
+                  </div>
+
+                  {/* Expanded metadata shown on hover */}
+                  <div className="flex flex-col gap-3 border-t border-black/5 pt-4 z-10">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <span className="text-[8px] uppercase tracking-wider text-accent/80 block">Type</span>
+                        <span className="text-[10px] font-bold text-foreground">International Journal</span>
+                      </div>
+                      <div>
+                        <span className="text-[8px] uppercase tracking-wider text-accent/80 block">Peer Review</span>
+                        <span className="text-[10px] font-bold text-foreground">JAAFR Approved</span>
+                      </div>
+                    </div>
+                    <p className="text-[10px] text-accent font-medium leading-relaxed opacity-60 group-hover:opacity-100 transition-opacity duration-300">
+                      Exploring candidate matchmaking models, NLP ranking optimization, and real-time interaction metrics.
+                    </p>
+                  </div>
+                </motion.div>
+              </div>
+            </motion.div>
+          </motion.div>
+        </section>
+
         {/* ================= CONTACT SECTION ================= */}
         <section id="contact" className="scroll-mt-24 mb-10">
           <motion.div
@@ -487,7 +740,7 @@ export default function HtmlOverlay({ fadeOutProgress }: { fadeOutProgress: numb
                 <span className="text-accent font-light italic">Something Real</span>
               </h2>
               <p className="text-sm text-foreground/80 leading-relaxed max-w-sm">
-                Have a project idea, want to collaborate on a 3D web experience, or simply chat about AI integrations? Drop a message!
+                Have a project idea, want to collaborate on a 3D web experience, or simply chat about Web development? Drop a message!
               </p>
 
               {/* Direct Details Contact List */}

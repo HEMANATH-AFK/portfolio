@@ -62,7 +62,7 @@ export default function TechOverlayGrid({ scrollProgress, fadeOutProgress }: Tec
         opacity,
         pointerEvents: opacity > 0.1 ? "auto" : "none"
       }}
-      className="fixed inset-0 w-full h-screen z-60 pointer-events-none transition-opacity duration-200 flex items-center justify-center"
+      className="fixed inset-0 w-full h-screen z-60 pointer-events-none transition-opacity duration-200 hidden md:flex items-center justify-center"
     >
       {/* 
         Container matching the exact bounding box of the drawn image on screen.
@@ -79,10 +79,10 @@ export default function TechOverlayGrid({ scrollProgress, fadeOutProgress }: Tec
         className="pointer-events-none"
       >
         {/* Bounding Box for the entire dashboard panel */}
-        <div className="absolute left-[6.2%] top-[11.5%] w-[87.6%] h-[76.5%] pointer-events-none">
+        <div className="absolute left-[9.375%] top-[13.54%] w-[77.54%] h-[67.01%] pointer-events-none">
           
           {/* ================= ROWS 1-3 GRID (18 HOTSPOTS) ================= */}
-          <div className="absolute left-[6.5%] top-[23%] w-[93%] h-[56.5%] grid grid-cols-6 grid-rows-3 gap-[0.4%] pointer-events-auto">
+          <div className="absolute left-[7.93%] top-[19.17%] w-[86.65%] h-[58.29%] grid grid-cols-6 grid-rows-3 gap-[0.4%] pointer-events-auto">
             {TECH_STACK.slice(0, 18).map((tech, idx) => {
               const isHovered = hoveredIdx === idx;
               return (
@@ -148,7 +148,7 @@ export default function TechOverlayGrid({ scrollProgress, fadeOutProgress }: Tec
           </div>
 
           {/* ================= ROW 4 (TOOLS, 5 HOTSPOTS) ================= */}
-          <div className="absolute left-[6.5%] top-[80%] w-[93%] h-[18.5%] flex justify-center gap-[0.4%] pointer-events-auto">
+          <div className="absolute left-[14.36%] top-[87.56%] w-[71.79%] h-[15.54%] flex justify-center gap-[0.4%] pointer-events-auto">
             {TECH_STACK.slice(18).map((tech, idx) => {
               const listIdx = idx + 18;
               const isHovered = hoveredIdx === listIdx;

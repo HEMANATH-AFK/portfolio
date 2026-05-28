@@ -10,10 +10,54 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "HEMANATH AFK | Premium 3D Developer Portfolio",
-  description: "Interactive 3D developer portfolio of HEMANATH AFK - Full Stack Developer, AI Enthusiast, and 3D Web Experience Builder. Exploring MERN apps, Three.js, and Gemini integrations.",
-  keywords: ["HEMANATH AFK", "Developer Portfolio", "Full Stack Developer", "3D Web", "Three.js", "React Three Fiber", "MERN Stack", "Puducherry"],
+  metadataBase: new URL("https://hemanath-afk.vercel.app"),
+  title: "HEMANATH AFK — Full Stack Developer & Cinematic 3D Web Engineer",
+  description: "Premium interactive developer portfolio showcasing full stack engineering, AI-powered applications, immersive 3D web experiences, cinematic frontend systems, and scalable software architecture.",
+  keywords: [
+    "Hemanath AFK", "Full Stack Developer", "MERN Stack Developer", "React Developer", 
+    "Three.js Developer", "AI Engineer", "Cinematic Portfolio", "Interactive Developer Portfolio", 
+    "Next.js Developer", "TypeScript Engineer", "Creative Developer", "Frontend Engineer", 
+    "Interactive Web Developer", "Cinematic Web Developer", "Software Engineer Portfolio", "3D Portfolio Website"
+  ],
   authors: [{ name: "HEMANATH AFK" }],
+  creator: "HEMANATH AFK",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://hemanath-afk.vercel.app",
+    title: "HEMANATH AFK — Full Stack Developer & Cinematic 3D Web Engineer",
+    description: "Premium interactive developer portfolio showcasing full stack engineering, AI-powered applications, immersive 3D web experiences, cinematic frontend systems, and scalable software architecture.",
+    siteName: "HEMANATH AFK Portfolio",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "HEMANATH AFK — Full Stack Developer & Cinematic 3D Web Engineer"
+      }
+    ]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "HEMANATH AFK — Full Stack Developer & Cinematic 3D Web Engineer",
+    description: "Premium interactive developer portfolio showcasing full stack engineering, AI-powered applications, immersive 3D web experiences, cinematic frontend systems, and scalable software architecture.",
+    images: ["/og-image.png"],
+    creator: "@hemanath_afk"
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1
+    }
+  },
+  alternates: {
+    canonical: "https://hemanath-afk.vercel.app"
+  }
 };
 
 export default function RootLayout({

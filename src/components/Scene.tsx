@@ -6,6 +6,7 @@ import * as THREE from "three";
 
 interface SceneProps {
   scrollProgress: number; // 0.0 to 1.0
+  fadeOutProgress: number; // 0.0 to 1.0
 }
 
 interface ParticleInfo {
@@ -36,7 +37,7 @@ const SEED_PARTICLES: ParticleInfo[] = (() => {
   return list;
 })();
 
-export default function Scene({ scrollProgress }: SceneProps) {
+export default function Scene({ scrollProgress, fadeOutProgress }: SceneProps) {
   const { camera } = useThree();
   const particleGroupRef = useRef<THREE.Group>(null);
   const targetCameraPos = useRef(new THREE.Vector3(0, 0, 5));
@@ -65,6 +66,10 @@ export default function Scene({ scrollProgress }: SceneProps) {
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
     const mouse = state.pointer; // normalized mouse coords (-1 to +1)
+
+    // Animate material opacities dynamically based on fadeOutProgress
+    materials.mattePebble.opacity = 0.85 * fadeOutProgress;
+    materials.dust.opacity = 0.4 * fadeOutProgress;
 
     // 1. Mouse Parallax on Camera
     // Gently offset the camera target based on mouse coordinates to create depth shifts
@@ -109,8 +114,8 @@ export default function Scene({ scrollProgress }: SceneProps) {
       <directionalLight position={[2, 3, 4]} intensity={1.2} />
       <directionalLight position={[-2, 1, 1]} intensity={0.4} color="#e5effa" />
 
-      {/* Floating 3D Particle Field Group */}
-      <group ref={particleGroupRef}>
+      {/* Floating 3D Particle Field Group (only visible when cinematic sequence fades out) */}
+      <group ref={particleGroupRef} visible={fadeOutProgress > 0.001}>
         {particles.map((part, idx) => (
           <mesh
             key={idx}
