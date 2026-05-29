@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
+import CustomCursor from "@/components/CustomCursor";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -68,6 +69,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`h-full scroll-smooth ${outfit.variable}`}>
       <body className="min-h-full flex flex-col antialiased bg-background">
+        <CustomCursor />
         {children}
       </body>
     </html>

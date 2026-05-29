@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { PROJECTS } from "@/data/projects";
 import {
@@ -22,7 +22,7 @@ import {
   ExternalLink
 } from "lucide-react";
 
-export default function HtmlOverlay({ fadeOutProgress }: { fadeOutProgress: number }) {
+export default function HtmlOverlay() {
   const [formState, setFormState] = useState({ name: "", email: "", subject: "", message: "" });
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -38,6 +38,35 @@ export default function HtmlOverlay({ fadeOutProgress }: { fadeOutProgress: numb
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const mainRef = useRef<HTMLElement>(null);
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      const mainEl = mainRef.current;
+      if (!mainEl) return;
+
+      if (window.innerWidth < 768) {
+        mainEl.style.opacity = "1";
+        return;
+      }
+
+      const currentScroll = window.scrollY;
+      const timelineHeight = window.innerHeight * 3.0;
+      const htmlFadeStart = timelineHeight + window.innerHeight * 0.6; // starts at 360vh
+      const htmlFadeEnd = timelineHeight + window.innerHeight * 1.0; // fully visible at 400vh
+      const htmlFade = Math.min(1.0, Math.max(0.0, (currentScroll - htmlFadeStart) / (htmlFadeEnd - htmlFadeStart)));
+
+      mainEl.style.opacity = String(htmlFade);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -106,8 +135,9 @@ export default function HtmlOverlay({ fadeOutProgress }: { fadeOutProgress: numb
 
       {/* Main DOM scroll sections container */}
       <main
-        className="w-full max-w-6xl mx-auto px-6 py-20 flex flex-col gap-32 md:gap-48 bg-transparent"
-        style={{ opacity: isMobile ? 1 : fadeOutProgress }}
+        ref={mainRef}
+        className="w-full max-w-6xl mx-auto px-6 py-20 flex flex-col gap-32 md:gap-48 bg-transparent transition-opacity duration-100"
+        style={{ opacity: isMobile ? 1 : 0 }}
       >
 
         {/* ================= ABOUT ME SECTION ================= */}
@@ -943,7 +973,7 @@ export default function HtmlOverlay({ fadeOutProgress }: { fadeOutProgress: numb
         <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] font-medium text-accent">
           <p>© {new Date().getFullYear()} HEMANATH AFK. All rights reserved.</p>
           <p className="italic">
-            Built from scratch using React, Three.js, and modern web technologies.
+            Built from scratch using Next.js, Three.js, and modern web technologies.
           </p>
         </div>
       </footer>

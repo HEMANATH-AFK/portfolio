@@ -5,8 +5,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
 interface SceneProps {
-  scrollProgress: number; // 0.0 to 1.0
-  fadeOutProgress: number; // 0.0 to 1.0
+  // Props removed to optimize scroll performance
 }
 
 interface ParticleInfo {
@@ -37,7 +36,7 @@ const SEED_PARTICLES: ParticleInfo[] = (() => {
   return list;
 })();
 
-export default function Scene({ scrollProgress, fadeOutProgress }: SceneProps) {
+export default function Scene({}: SceneProps) {
   const { camera } = useThree();
   const particleGroupRef = useRef<THREE.Group>(null);
   const targetCameraPos = useRef(new THREE.Vector3(0, 0, 5));
@@ -51,21 +50,39 @@ export default function Scene({ scrollProgress, fadeOutProgress }: SceneProps) {
         roughness: 0.7,
         metalness: 0.05,
         transparent: true,
-        opacity: 0.85,
+        opacity: 0.0, // Start hidden, will be animated by scroll
       }),
       dust: new THREE.MeshStandardMaterial({
         color: "#554E48",
         roughness: 0.9,
         transparent: true,
-        opacity: 0.4,
+        opacity: 0.0, // Start hidden, will be animated by scroll
       })
     };
   }, []);
 
-  // Frame tick updates
+  // Frame tick updates - running natively in the R3F loop at 60fps/120fps
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
     const mouse = state.pointer; // normalized mouse coords (-1 to +1)
+
+    // Calculate scroll progress locally inside useFrame to bypass React renders
+    const currentScroll = typeof window !== "undefined" ? window.scrollY : 0;
+    const timelineHeight = typeof window !== "undefined" ? window.innerHeight * 3.0 : 1000;
+    const scrollProgress = Math.min(1.0, Math.max(0.0, currentScroll / timelineHeight));
+
+    let fadeOutProgress = 0;
+    if (typeof window !== "undefined") {
+      if (window.innerWidth < 768) {
+        const mobileFadeStart = window.innerHeight * 0.3;
+        const mobileFadeEnd = window.innerHeight * 0.9;
+        fadeOutProgress = Math.min(1.0, Math.max(0.0, (currentScroll - mobileFadeStart) / (mobileFadeEnd - mobileFadeStart)));
+      } else {
+        const fadeStart = timelineHeight;
+        const fadeEnd = timelineHeight + window.innerHeight * 0.4;
+        fadeOutProgress = Math.min(1.0, Math.max(0.0, (currentScroll - fadeStart) / (fadeEnd - fadeStart)));
+      }
+    }
 
     // Animate material opacities dynamically based on fadeOutProgress
     materials.mattePebble.opacity = 0.85 * fadeOutProgress;
@@ -87,6 +104,9 @@ export default function Scene({ scrollProgress, fadeOutProgress }: SceneProps) {
       // Gently drift group with scroll
       particleGroupRef.current.position.y = -scrollProgress * 0.3;
       
+      // Update visibility directly
+      particleGroupRef.current.visible = fadeOutProgress > 0.001;
+
       const children = particleGroupRef.current.children;
       particles.forEach((part, idx) => {
         const mesh = children[idx] as THREE.Mesh;
@@ -114,8 +134,8 @@ export default function Scene({ scrollProgress, fadeOutProgress }: SceneProps) {
       <directionalLight position={[2, 3, 4]} intensity={1.2} />
       <directionalLight position={[-2, 1, 1]} intensity={0.4} color="#e5effa" />
 
-      {/* Floating 3D Particle Field Group (only visible when cinematic sequence fades out) */}
-      <group ref={particleGroupRef} visible={fadeOutProgress > 0.001}>
+      {/* Floating 3D Particle Field Group */}
+      <group ref={particleGroupRef} visible={false}>
         {particles.map((part, idx) => (
           <mesh
             key={idx}

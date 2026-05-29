@@ -14,9 +14,6 @@ const ImageSequencePlayer = dynamic(() => import("@/components/ImageSequencePlay
 const TechOverlayGrid = dynamic(() => import("@/components/TechOverlayGrid"), { ssr: false });
 
 export default function Home() {
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [fadeOutProgress, setFadeOutProgress] = useState(0);
-  const [htmlFadeInProgress, setHtmlFadeInProgress] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -38,39 +35,20 @@ export default function Home() {
     };
   }, []);
 
-  // Monitor scroll height to calculate normalized progression (0.0 to 1.0)
+  // High-performance scroll tracking for direct DOM updates and scroll-to-top visibility
   useEffect(() => {
+    const heroEl = document.getElementById("hero-section");
     const handleScroll = () => {
-      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-      if (scrollHeight <= 0) return;
-
       const currentScroll = window.scrollY;
-      // Scroll timeline for cinematic sequence runs for the first 3 viewports (300vh distance)
       const timelineHeight = window.innerHeight * 3.0;
-
       const progress = Math.min(1.0, Math.max(0.0, currentScroll / timelineHeight));
-      setScrollProgress(progress);
+      const opacity = Math.max(0, 1 - progress * 6.6);
 
-      // Fade out the pre-rendered frames to reveal the solid background color
-      // Desktop: fades out past 300vh
-      // Mobile: fades out as the About section scrolls up (30vh to 90vh scroll position)
-      let fade = 0;
-      if (window.innerWidth < 768) {
-        const mobileFadeStart = window.innerHeight * 0.3;
-        const mobileFadeEnd = window.innerHeight * 0.9;
-        fade = Math.min(1.0, Math.max(0.0, (currentScroll - mobileFadeStart) / (mobileFadeEnd - mobileFadeStart)));
-      } else {
-        const fadeStart = timelineHeight;
-        const fadeEnd = timelineHeight + window.innerHeight * 0.4;
-        fade = Math.min(1.0, Math.max(0.0, (currentScroll - fadeStart) / (fadeEnd - fadeStart)));
+      if (heroEl) {
+        heroEl.style.opacity = String(opacity);
+        heroEl.style.visibility = opacity > 0.001 ? "visible" : "hidden";
       }
-      setFadeOutProgress(fade);
 
-      // Fade in the HTML overlay sections past 400vh spacer (one laptop screen down)
-      const htmlFadeStart = timelineHeight + window.innerHeight * 0.6; // starts at 360vh
-      const htmlFadeEnd = timelineHeight + window.innerHeight * 1.0; // fully visible at 400vh
-      const htmlFade = Math.min(1.0, Math.max(0.0, (currentScroll - htmlFadeStart) / (htmlFadeEnd - htmlFadeStart)));
-      setHtmlFadeInProgress(htmlFade);
       setShowScrollTop(currentScroll > 300);
     };
 
@@ -81,9 +59,6 @@ export default function Home() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  // Fades out the opening landing text overlays completely by 15% scroll
-  const heroTextOpacity = Math.max(0, 1 - scrollProgress * 6.6);
 
   return (
     <Providers>
@@ -150,19 +125,15 @@ export default function Home() {
         />
 
         {/* 1. Background Cinematic Image Sequence */}
-        <ImageSequencePlayer
-          scrollProgress={scrollProgress}
-          fadeOutProgress={fadeOutProgress}
-          onLoadComplete={() => { }}
-        />
+        <ImageSequencePlayer onLoadComplete={() => { }} />
 
         {/* 2. WebGL 3D Particle Parallax Overlay */}
         <ThreeCanvas>
-          <Scene scrollProgress={scrollProgress} fadeOutProgress={fadeOutProgress} />
+          <Scene />
         </ThreeCanvas>
 
-        {/* 3. Interactive Technology Grid Overlay (Active at scroll > 72%, fades out past 300vh) */}
-        <TechOverlayGrid scrollProgress={scrollProgress} fadeOutProgress={fadeOutProgress} />
+        {/* 3. Interactive Technology Grid Overlay */}
+        <TechOverlayGrid />
 
         {/* ================= FIXED NAVBAR ================= */}
         <header className="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-4xl z-50 pointer-events-auto">
@@ -270,36 +241,35 @@ export default function Home() {
         </header>
 
         {/* ================= INITIAL HERO OVERLAYS (0% to 15% scroll) ================= */}
-        {heroTextOpacity > 0.001 && (
-          <motion.section 
-            style={{ opacity: heroTextOpacity }}
-            initial="hidden"
-            animate="visible"
-            variants={{
-              visible: { transition: { staggerChildren: 0.15 } }
-            }}
-            className="fixed inset-0 w-full h-screen flex flex-col justify-between items-center py-20 px-6 md:px-16 lg:px-24 z-20 pointer-events-none transition-opacity duration-300 font-outfit"
-            aria-label="Hero Introduction"
-          >
+        <motion.section 
+          id="hero-section"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            visible: { transition: { staggerChildren: 0.15 } }
+          }}
+          className="fixed inset-0 w-full h-screen flex flex-col justify-between items-center py-20 px-6 md:px-16 lg:px-24 z-20 pointer-events-none transition-opacity duration-300 font-outfit"
+          aria-label="Hero Introduction"
+        >
             <div />
 
             {/* Asymmetrical Left-Aligned Hero Details */}
-            <div className="w-full flex flex-col md:flex-row justify-between items-center md:items-center h-full pointer-events-none">
+            <div className="w-full flex flex-col md:flex-row justify-end md:justify-between items-center md:items-center h-full pointer-events-none">
               
               <motion.div 
                 variants={{
                   hidden: { opacity: 0, y: 30 },
                   visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] } }
                 }}
-                className="flex flex-col items-center md:items-start text-center md:text-left gap-4 max-w-lg mt-20 md:mt-0 pointer-events-auto w-full md:w-auto"
+                className="flex flex-col items-center md:items-start text-center md:text-left gap-4 max-w-lg mb-16 md:mb-0 pointer-events-auto w-full md:w-auto"
               >
                 <span className="text-[10px] uppercase font-bold tracking-widest text-accent bg-surface/95 px-3 py-1.5 rounded-full border border-white/50 shadow-sm w-fit">
                   MERN Stack Web Developer
                 </span>
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight text-foreground leading-none font-outfit uppercase">
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight text-white md:text-foreground leading-none font-outfit uppercase hero-title-shadow">
                   HEMANATH AFK
                 </h1>
-                <p className="text-[11px] md:text-xs text-foreground/75 leading-relaxed max-w-[420px] font-normal">
+                <p className="text-[16px] md:text-s text-white md:text-foreground/75 leading-relaxed max-w-[420px] font-normal hero-body-shadow">
                   Building immersive digital experiences through scalable engineering, cinematic interfaces, intelligent systems, and interactive 3D environments.
                 </p>
               </motion.div>
@@ -361,12 +331,11 @@ export default function Home() {
                 Resume
               </motion.a>
             </motion.div>
-          </motion.section>
-        )}
+        </motion.section>
 
         {/* ================= SCROLLING DOM CONTENT ================= */}
         {/* Renders About Me, Projects, and Contact details scroll layers */}
-        <HtmlOverlay fadeOutProgress={htmlFadeInProgress} />
+        <HtmlOverlay />
 
         {/* Canvas root pointer-events helper */}
         <div id="canvas-root" className="absolute inset-0 z-0 pointer-events-none" />

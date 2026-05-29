@@ -1,17 +1,17 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { TECH_STACK } from "@/data/techStack";
 
 interface TechOverlayGridProps {
-  scrollProgress: number; // 0.0 to 1.0
-  fadeOutProgress: number; // 0.0 to 1.0
+  // Props removed to optimize scroll performance
 }
 
-export default function TechOverlayGrid({ scrollProgress, fadeOutProgress }: TechOverlayGridProps) {
+export default function TechOverlayGrid({}: TechOverlayGridProps) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
   const [layout, setLayout] = useState({ width: 0, height: 0, left: 0, top: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Calculate the exact size and position of the canvas cover image dynamically
   useEffect(() => {
@@ -47,20 +47,55 @@ export default function TechOverlayGrid({ scrollProgress, fadeOutProgress }: Tec
     return () => window.removeEventListener("resize", updateLayout);
   }, []);
 
-  // Grid is active past 72% scroll timeline
-  const isActive = scrollProgress >= 0.72;
-  const baseOpacity = isActive ? Math.min(1, (scrollProgress - 0.72) / 0.06) : 0;
-  
-  // Fade out alongside background player when user scrolls past 300vh
-  const opacity = baseOpacity * (1 - fadeOutProgress);
+  // Handle opacity and pointer-events natively on scroll to bypass React re-renders
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScroll = window.scrollY;
+      const timelineHeight = window.innerHeight * 3.0;
+      const progress = Math.min(1.0, Math.max(0.0, currentScroll / timelineHeight));
 
-  if (opacity <= 0.005) return null;
+      let fade = 0;
+      if (window.innerWidth < 768) {
+        const mobileFadeStart = window.innerHeight * 0.3;
+        const mobileFadeEnd = window.innerHeight * 0.9;
+        fade = Math.min(1.0, Math.max(0.0, (currentScroll - mobileFadeStart) / (mobileFadeEnd - mobileFadeStart)));
+      } else {
+        const fadeStart = timelineHeight;
+        const fadeEnd = timelineHeight + window.innerHeight * 0.4;
+        fade = Math.min(1.0, Math.max(0.0, (currentScroll - fadeStart) / (fadeEnd - fadeStart)));
+      }
+
+      // Grid is active past 72% scroll timeline
+      const isActive = progress >= 0.72;
+      const baseOpacity = isActive ? Math.min(1, (progress - 0.72) / 0.06) : 0;
+      const targetOpacity = baseOpacity * (1 - fade);
+
+      const container = containerRef.current;
+      if (container) {
+        container.style.opacity = String(targetOpacity);
+        if (targetOpacity > 0.01) {
+          container.style.pointerEvents = "auto";
+          container.style.visibility = "visible";
+        } else {
+          container.style.pointerEvents = "none";
+          container.style.visibility = "hidden";
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <div 
+      ref={containerRef}
       style={{ 
-        opacity,
-        pointerEvents: opacity > 0.1 ? "auto" : "none"
+        opacity: 0,
+        pointerEvents: "none",
+        visibility: "hidden"
       }}
       className="fixed inset-0 w-full h-screen z-60 pointer-events-none transition-opacity duration-200 hidden md:flex items-center justify-center"
     >
