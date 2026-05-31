@@ -58,6 +58,9 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "https://hemanath-afk.vercel.app"
+  },
+  verification: {
+    google: "RuZB8p5yrlWkM5oE_SZQUaDj47JCTd73RPLemOcG6KY"
   }
 };
 
