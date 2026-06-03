@@ -73,12 +73,20 @@ export default function Home() {
                 {
                   "@type": "Person",
                   "@id": "https://hemanath-afk.vercel.app/#person",
-                  "name": "Hemanath AFK",
-                  "jobTitle": "Full Stack Developer & Cinematic 3D Web Engineer",
+                  "name": "Hemanath S",
+                  "alternateName": "Hemanath AFK",
+                  "jobTitle": "Full Stack Developer",
+                  "email": "hemanathkalai29@gmail.com",
+                  "telephone": "+91 8778246378",
                   "url": "https://hemanath-afk.vercel.app",
+                  "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Puducherry",
+                    "addressCountry": "India"
+                  },
                   "sameAs": [
-                    "https://www.linkedin.com/in/hemanath-afk",
-                    "https://github.com/hemanath-afk"
+                    "https://github.com/HEMANATH-AFK",
+                    "https://www.linkedin.com/in/hemanath-afk"
                   ],
                   "knowsAbout": [
                     "Full Stack Development",
@@ -104,21 +112,66 @@ export default function Home() {
                   "@type": "WebSite",
                   "@id": "https://hemanath-afk.vercel.app/#website",
                   "url": "https://hemanath-afk.vercel.app",
-                  "name": "HEMANATH AFK Portfolio",
+                  "name": "Hemanath S | Full Stack Developer | React, Next.js, Node.js & AI Applications",
                   "description": "Premium interactive developer portfolio showcasing full stack engineering, AI-powered applications, and cinematic 3D web experiences.",
                   "publisher": {
+                    "@id": "https://hemanath-afk.vercel.app/#person"
+                  },
+                  "potentialAction": {
+                    "@type": "SearchAction",
+                    "target": "https://hemanath-afk.vercel.app/?search={search_term_string}",
+                    "query-input": "required name=search_term_string"
+                  }
+                },
+                {
+                  "@type": "WebPage",
+                  "@id": "https://hemanath-afk.vercel.app/#webpage",
+                  "url": "https://hemanath-afk.vercel.app",
+                  "name": "Hemanath S | Full Stack Developer | React, Next.js, Node.js & AI Applications",
+                  "isPartOf": {
+                    "@id": "https://hemanath-afk.vercel.app/#website"
+                  },
+                  "about": {
                     "@id": "https://hemanath-afk.vercel.app/#person"
                   }
                 },
                 {
-                  "@type": "ResearchProject",
-                  "name": "AI-Powered Smart Recruitment System for Intelligent Candidate Evaluation and Hiring Optimization",
+                  "@type": "ScholarlyArticle",
+                  "headline": "AI-Powered Smart Recruitment System for Intelligent Candidate Evaluation and Hiring Optimization",
                   "description": "This research explores the development of an AI-powered smart recruitment platform capable of improving candidate evaluation workflows, intelligent hiring optimization, and scalable recruitment interaction systems.",
                   "url": "https://rjwave.org/jaafr/viewpaperforall.php?paper=JAAFR2605325",
+                  "sameAs": [
+                    "https://drive.google.com/file/d/1gxamD6-yzWnMuF9EjgyKGcftZ0PVswPI/view",
+                    "https://drive.google.com/file/d/1PI0_iMvEe9n6RplGCgz68-ihsdUjNN-s/view"
+                  ],
                   "author": {
                     "@id": "https://hemanath-afk.vercel.app/#person"
+                  },
+                  "publisher": {
+                    "@type": "Organization",
+                    "name": "Research Journal of Wave",
+                    "url": "https://rjwave.org"
                   }
-                }
+                },
+                ...[
+                  { slug: "quantumcart", name: "QuantumCart" },
+                  { slug: "hireafk", name: "HireAFK" },
+                  { slug: "projectforge", name: "ProjectForge" },
+                  { slug: "restroafk", name: "RestroAFK" },
+                  { slug: "indjcst-migration", name: "INDJCST Migration" },
+                  { slug: "scirank", name: "SciRank" },
+                  { slug: "railluxury", name: "RailLuxury" },
+                  { slug: "afk-blogspace", name: "AFK BlogSpace" },
+                  { slug: "eclipse-afk", name: "Eclipse AFK" }
+                ].map((p) => ({
+                  "@type": "CreativeWork",
+                  "@id": `https://hemanath-afk.vercel.app/${p.slug}#creativework`,
+                  "name": p.name,
+                  "author": {
+                    "@id": "https://hemanath-afk.vercel.app/#person"
+                  },
+                  "url": `https://hemanath-afk.vercel.app/${p.slug}`
+                }))
               ]
             })
           }}
@@ -323,7 +376,7 @@ export default function Home() {
               <motion.a 
                 whileHover={{ scale: 1.04, y: -2 }}
                 whileTap={{ scale: 0.98 }}
-                href="https://drive.google.com/file/d/1KuJpKYA6k_0Bt4PaScD68LFsB0g3cFB8/view?usp=sharing"
+                href="https://drive.google.com/file/d/1OBsu5YqI-MtM9_mYjAG5v7hZ-swcxQGF/view?usp=sharing"
                 target="_blank"
                 rel="noreferrer"
                 className="px-4 py-2 bg-surface hover:bg-foreground hover:text-background border border-white/40 hover:border-transparent text-foreground rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer"

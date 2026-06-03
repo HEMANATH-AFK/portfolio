@@ -12,37 +12,37 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://hemanath-afk.vercel.app"),
-  title: "HEMANATH AFK — Full Stack Developer & Cinematic 3D Web Engineer",
-  description: "Premium interactive developer portfolio showcasing full stack engineering, AI-powered applications, immersive 3D web experiences, cinematic frontend systems, and scalable software architecture.",
+  title: "Hemanath S | Full Stack Developer | React, Next.js, Node.js & AI Applications",
+  description: "Official developer portfolio of Hemanath S (Hemanath AFK), a Full Stack MERN Developer, Frontend Engineer, and AI Integration Enthusiast in Puducherry, India. Discover production-grade web systems like QuantumCart, AI-assisted tools like HireAFK, published academic research, and immersive WebGL environments.",
   keywords: [
-    "Hemanath AFK", "Full Stack Developer", "MERN Stack Developer", "React Developer", 
-    "Three.js Developer", "AI Engineer", "Cinematic Portfolio", "Interactive Developer Portfolio", 
-    "Next.js Developer", "TypeScript Engineer", "Creative Developer", "Frontend Engineer", 
-    "Interactive Web Developer", "Cinematic Web Developer", "Software Engineer Portfolio", "3D Portfolio Website"
+    "Hemanath S", "Hemanath AFK", "Full Stack Developer", "MERN Stack Developer", "React Developer", 
+    "Next.js Developer", "Node.js Developer", "MongoDB Developer", "Frontend Developer India", 
+    "Portfolio Developer", "Software Developer Portfolio", "AI Integration Developer", "React Three Fiber Developer",
+    "Three.js Developer", "AI Engineer", "Cinematic Portfolio", "Interactive Developer Portfolio", "TypeScript Engineer"
   ],
-  authors: [{ name: "HEMANATH AFK" }],
-  creator: "HEMANATH AFK",
+  authors: [{ name: "HEMANATH S" }],
+  creator: "HEMANATH S",
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "https://hemanath-afk.vercel.app",
-    title: "HEMANATH AFK — Full Stack Developer & Cinematic 3D Web Engineer",
-    description: "Premium interactive developer portfolio showcasing full stack engineering, AI-powered applications, immersive 3D web experiences, cinematic frontend systems, and scalable software architecture.",
-    siteName: "HEMANATH AFK Portfolio",
+    title: "Hemanath S | Full Stack Developer | React, Next.js, Node.js & AI Applications",
+    description: "Official developer portfolio of Hemanath S (Hemanath AFK). Discover MERN stack systems, AI-powered applications, academic publications, and interactive 3D web experiences.",
+    siteName: "Hemanath S Portfolio",
     images: [
       {
-        url: "/og-image.png",
+        url: "/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "HEMANATH AFK — Full Stack Developer & Cinematic 3D Web Engineer"
+        alt: "Hemanath S | Full Stack Developer Portfolio"
       }
     ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "HEMANATH AFK — Full Stack Developer & Cinematic 3D Web Engineer",
-    description: "Premium interactive developer portfolio showcasing full stack engineering, AI-powered applications, immersive 3D web experiences, cinematic frontend systems, and scalable software architecture.",
-    images: ["/og-image.png"],
+    title: "Hemanath S | Full Stack Developer | React, Next.js, Node.js & AI Applications",
+    description: "Official developer portfolio of Hemanath S (Hemanath AFK). Discover MERN stack systems, AI-powered applications, academic publications, and interactive 3D web experiences.",
+    images: ["/twitter-image.png"],
     creator: "@hemanath_afk"
   },
   robots: {
@@ -70,7 +70,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`h-full scroll-smooth ${outfit.variable}`}>
+    <html lang="en" className={`h-full scroll-smooth ${outfit.variable}`} data-scroll-behavior="smooth">
       <body className="min-h-full flex flex-col antialiased bg-background">
         <CustomCursor />
         {children}

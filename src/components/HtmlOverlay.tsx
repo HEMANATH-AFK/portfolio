@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { PROJECTS } from "@/data/projects";
 import {
@@ -19,7 +20,8 @@ import {
   BookOpen,
   FileText,
   Award,
-  ExternalLink
+  ExternalLink,
+  ChevronRight
 } from "lucide-react";
 
 export default function HtmlOverlay() {
@@ -184,6 +186,15 @@ export default function HtmlOverlay() {
                   <div>
                     <span className="text-accent block text-[9px] uppercase tracking-wider">Academic Record</span>
                     Cumulative CGPA: 7.2
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 bg-surface/60 p-3.5 rounded-xl border border-white/40">
+                  <Terminal size={16} className="text-accent mt-0.5" />
+                  <div>
+                    <span className="text-accent block text-[9px] uppercase tracking-wider font-bold">Development Philosophy</span>
+                    <span className="text-[11px] leading-relaxed text-foreground/85 block mt-0.5">
+                      I believe in writing performance-driven, decoupled systems that serve practical human needs. I combine visual excellence with clean, crawlable semantic structures.
+                    </span>
                   </div>
                 </div>
               </div>
