@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
 import Providers from "@/components/Providers";
 import HtmlOverlay from "@/components/HtmlOverlay";
-import { Code, Mail, User, Layers, BookOpen, Menu, X } from "lucide-react";
+import { Code, Mail, User, Layers, BookOpen, Menu, X, Package } from "lucide-react";
 
 // Dynamically import client components to prevent SSR hydration errors
 const ThreeCanvas = dynamic(() => import("@/components/ThreeCanvas"), { ssr: false });
@@ -101,11 +101,26 @@ export default function Home() {
                     "Software Engineering",
                     "Creative Development",
                     "Frontend Engineering",
-                    "Cinematic Web Design"
+                    "Cinematic Web Design",
+                    "Open Source Software",
+                    "JavaScript Animation Library",
+                    "npm Package Publishing"
                   ],
                   "alumniOf": {
                     "@type": "EducationalOrganization",
                     "name": "Rajiv Gandhi College"
+                  }
+                },
+                {
+                  "@type": "SoftwareSourceCode",
+                  "@id": "https://hemanath-afk.vercel.app/#afk-motion",
+                  "name": "AFK Motion",
+                  "description": "Lightweight JavaScript Animation Library designed to simplify the implementation of smooth UI interactions and motion effects.",
+                  "programmingLanguage": "JavaScript",
+                  "codeRepository": "https://github.com/HEMANATH-AFK/afk-motion",
+                  "runtimePlatform": "Node.js, npm, Web Browsers",
+                  "author": {
+                    "@id": "https://hemanath-afk.vercel.app/#person"
                   }
                 },
                 {
@@ -148,7 +163,7 @@ export default function Home() {
                     "@id": "https://hemanath-afk.vercel.app/#person"
                   },
                   "publisher": {
-                    "@type": "Organization",
+                    "@type": "EducationalOrganization",
                     "name": "Research Journal of Wave",
                     "url": "https://rjwave.org"
                   }
@@ -162,7 +177,8 @@ export default function Home() {
                   { slug: "scirank", name: "SciRank" },
                   { slug: "railluxury", name: "RailLuxury" },
                   { slug: "afk-blogspace", name: "AFK BlogSpace" },
-                  { slug: "eclipse-afk", name: "Eclipse AFK" }
+                  { slug: "eclipse-afk", name: "Eclipse AFK" },
+                  { slug: "afk-motion", name: "AFK Motion" }
                 ].map((p) => ({
                   "@type": "CreativeWork",
                   "@id": `https://hemanath-afk.vercel.app/${p.slug}#creativework`,
@@ -223,6 +239,10 @@ export default function Home() {
                 <Code size={12} />
                 Projects
               </a>
+              <a href="#open-source" className="hover:text-foreground transition-colors flex items-center gap-1.5">
+                <Package size={12} />
+                Open Source
+              </a>
               <a href="#journey" className="hover:text-foreground transition-colors flex items-center gap-1.5">
                 <Layers size={12} />
                 Journey
@@ -248,9 +268,9 @@ export default function Home() {
                   className="flex md:hidden flex-col gap-4 text-xs font-bold uppercase tracking-wider text-accent border-t border-black/5 pt-4 w-full"
                 >
                   <a
-                    href="#about"
-                    onClick={() => setMenuOpen(false)}
-                    className="hover:text-foreground transition-colors flex items-center gap-2.5 py-1"
+                     href="#about"
+                     onClick={() => setMenuOpen(false)}
+                     className="hover:text-foreground transition-colors flex items-center gap-2.5 py-1"
                   >
                     <User size={14} />
                     About
@@ -262,6 +282,14 @@ export default function Home() {
                   >
                     <Code size={14} />
                     Projects
+                  </a>
+                  <a
+                    href="#open-source"
+                    onClick={() => setMenuOpen(false)}
+                    className="hover:text-foreground transition-colors flex items-center gap-2.5 py-1"
+                  >
+                    <Package size={14} />
+                    Open Source
                   </a>
                   <a
                     href="#journey"

@@ -274,5 +274,33 @@ export const PROJECTS_SEO: Record<string, ProjectSEOData> = {
       "Making Three.js canvas data crawlable: Solved by placing complete semantic HTML structures in the DOM overlay, mapping every WebGL element to a crawlable text node."
     ],
     results: "Delivered a premium 3D creative site that achieves a 100/100 Lighthouse SEO score and remains fully indexable by search engines."
+  },
+  "afk-motion": {
+    slug: "afk-motion",
+    name: "AFK Motion",
+    sub: "Lightweight JavaScript Animation Library",
+    githubUrl: "https://github.com/HEMANATH-AFK/afk-motion",
+    iconName: "Code",
+    overview: "AFK Motion is an open-source npm package designed to simplify the implementation of smooth UI interactions and reusable motion effects in modern web applications.",
+    problem: "Frontend developers frequently re-write repetitive CSS animations and JavaScript transitions for every new project, introducing package bloating, inconsistencies in acceleration curves, and unnecessary DOM reflow overhead.",
+    solution: "AFK Motion solves this by packaging pre-built, high-performance animation helpers into a lightweight, tree-shakable ES Module. It eliminates boilerplate code, works seamlessly with vanilla JS or frontend frameworks, and runs smoothly with minimal memory footprint.",
+    architecture: "A modular, zero-dependency JavaScript package compiled for both ESM and CommonJS distributions. It exposes target elements to optimized hardware-accelerated animations using standard requestAnimationFrame pipelines and GPU-friendly CSS transforms.",
+    features: [
+      "Reusable Motion Utilities: Pre-built animation helpers designed to reduce boilerplate code and accelerate UI development.",
+      "JavaScript First: Built with accessibility and adoption in mind, making integration straightforward for JavaScript-based projects.",
+      "Lightweight Architecture: Focused on performance and simplicity without introducing unnecessary complexity.",
+      "Developer Experience: Easy installation, clean APIs, and straightforward integration patterns for modern frontend applications."
+    ],
+    technologies: [
+      { name: "JavaScript", category: "Language", description: "Core programming language for writing the library helpers and animation math." },
+      { name: "Node.js", category: "Runtime", description: "Development runtime environment for package bundling and dev tooling." },
+      { name: "npm", category: "Registry", description: "Dependency distribution platform and registry registry." },
+      { name: "ES Modules", category: "Module System", description: "Modern module system enabling tree-shaking and efficient imports." }
+    ],
+    challenges: [
+      "Ensuring smooth 60 FPS transition execution across mobile browsers: Resolved by utilizing transform-only CSS bindings and hardware acceleration keys, avoiding layout reflows.",
+      "Publishing a dual ESM/CommonJS package with clean TypeScript declarations: Resolved by configuring custom rollup bundling pipelines and generating separate build targets."
+    ],
+    results: "Published to npm under @hemanath-afk/afk-motion, providing a modular utility toolkit that decreases interface transition code lines by up to 60%."
   }
 };

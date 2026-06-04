@@ -311,6 +311,14 @@ export default async function Page({ params }: PageProps) {
         },
         {
           "@type": "Question",
+          "name": "Has Hemanath published any npm packages or open-source libraries?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, Hemanath S has published @hemanath-afk/afk-motion, a lightweight JavaScript animation library, on the npm registry. It is designed to simplify UI animations, pre-built motion utilities, and reusable motion effects in modern web applications."
+          }
+        },
+        {
+          "@type": "Question",
           "name": "How can I contact Hemanath?",
           "acceptedAnswer": {
             "@type": "Answer",

@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "railluxury",
     "afk-blogspace",
     "eclipse-afk",
+    "afk-motion",
   ];
 
   const utilitySlugs = ["about", "contact", "research-publication", "faq", "projects"];

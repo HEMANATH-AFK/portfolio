@@ -4,6 +4,7 @@ import React, { useState, useRef } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { PROJECTS } from "@/data/projects";
+import { OPEN_SOURCE } from "@/data/opensource";
 import {
   User,
   MapPin,
@@ -21,7 +22,8 @@ import {
   FileText,
   Award,
   ExternalLink,
-  ChevronRight
+  ChevronRight,
+  Package
 } from "lucide-react";
 
 export default function HtmlOverlay() {
@@ -30,6 +32,7 @@ export default function HtmlOverlay() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [activeTab, setActiveTab] = useState<"features" | "stack" | "breakdown">("features");
+  const [osActiveTab, setOsActiveTab] = useState<"features" | "breakdown" | "impact">("features");
   const [activeProjectIdx, setActiveProjectIdx] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -489,6 +492,226 @@ export default function HtmlOverlay() {
           </motion.div>
         </section>
 
+        {/* ================= OPEN SOURCE & DEVELOPER TOOLS SECTION ================= */}
+        <section id="open-source" className="scroll-mt-24">
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            className="flex flex-col gap-10"
+          >
+            {/* Section Header */}
+            <motion.div variants={itemVariants} className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+              <div className="flex flex-col gap-3">
+                <div className="inline-flex items-center gap-2 bg-surface/80 px-3 py-1.5 rounded-full border border-white/50 w-fit">
+                  <Package size={14} className="text-accent" />
+                  <span className="text-xs font-semibold uppercase tracking-wider text-accent">{OPEN_SOURCE.stats.title}</span>
+                </div>
+                <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
+                  Open Source & Developer Tools
+                </h2>
+              </div>
+              <p className="text-xs text-accent max-w-xs font-medium md:text-right">
+                Building tools for developers, contributing to the open-source ecosystem, and sharing reusable solutions with the community.
+              </p>
+            </motion.div>
+
+            {/* Open Source Contribution Card */}
+            <motion.div variants={itemVariants} className="w-full">
+              <div className="matte-card overflow-hidden grid grid-cols-1 lg:grid-cols-12 border border-white/60">
+                {/* Branding Sidebar (Left 4 cols) */}
+                <div className="lg:col-span-4 bg-accent/10 p-8 md:p-10 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-black/5 relative group">
+                  <div className="absolute top-0 right-0 p-8 pointer-events-none opacity-10 group-hover:scale-110 transition-transform duration-700">
+                    <Package size={140} className="text-accent" />
+                  </div>
+
+                  <div className="flex flex-col gap-6">
+                    <span className="text-[10px] uppercase font-bold tracking-widest text-accent">
+                      Featured Contribution
+                    </span>
+                    <div>
+                      <h3 className="text-3xl font-extrabold text-foreground tracking-tight">{OPEN_SOURCE.name}</h3>
+                      <p className="text-xs font-medium text-accent mt-1">{OPEN_SOURCE.sub}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-4 mt-8 lg:mt-0">
+                    {OPEN_SOURCE.desc.map((p, idx) => (
+                      <p key={idx} className="text-[11px] text-foreground/80 leading-relaxed">
+                        {p}
+                      </p>
+                    ))}
+                    {/* Tech Stack badges */}
+                    <div className="flex flex-wrap gap-1.5 mt-4">
+                      {OPEN_SOURCE.stack.map((tech) => (
+                        <span key={tech} className="bg-surface/50 border border-white/30 text-[9px] font-bold uppercase tracking-wider text-accent px-2.5 py-1 rounded-md">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tabbed Specs (Right 8 cols) */}
+                <div className="lg:col-span-8 p-8 md:p-10 flex flex-col gap-6 bg-white/30 backdrop-blur-sm justify-between">
+                  {/* Tab Selector */}
+                  <div className="flex flex-col gap-6">
+                    <div className="flex border-b border-black/5 pb-2 gap-4">
+                      {([
+                        { id: "features", label: "Core Features", icon: Layers },
+                        { id: "breakdown", label: "Developer Breakdown", icon: Terminal },
+                        { id: "impact", label: "Open Source Impact", icon: Database }
+                      ] as const).map((tab) => {
+                        const Icon = tab.icon;
+                        const isActive = osActiveTab === tab.id;
+                        return (
+                          <button
+                            key={tab.id}
+                            onClick={() => setOsActiveTab(tab.id)}
+                            className={`flex items-center gap-1.5 pb-2 text-xs font-semibold border-b-2 transition-all cursor-pointer ${isActive
+                                ? "border-foreground text-foreground"
+                                : "border-transparent text-accent hover:text-foreground"
+                              }`}
+                          >
+                            <Icon size={13} />
+                            {tab.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Tab Contents */}
+                    <div className="min-h-[220px]">
+                      {osActiveTab === "features" && (
+                        <div className="flex flex-col gap-4">
+                          <p className="text-xs text-foreground/80 leading-relaxed">
+                            AFK Motion was designed with a focus on size, developer ergonomics, and native execution:
+                          </p>
+                          <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-foreground">
+                            {OPEN_SOURCE.features.map((item, i) => (
+                              <li key={i} className="flex gap-2.5 bg-surface/50 p-3 rounded-lg border border-white/30">
+                                <span className="font-bold text-accent text-xs">0{i + 1}.</span>
+                                <div>
+                                  <span className="font-bold block text-xs mb-0.5">{item.title}</span>
+                                  <span className="text-[10px] text-foreground/80 block leading-snug">{item.desc}</span>
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {osActiveTab === "breakdown" && (
+                        <div className="flex flex-col gap-3">
+                          <p className="text-xs text-foreground/80 leading-relaxed">
+                            {OPEN_SOURCE.breakdown.intro}
+                          </p>
+                          <div className="bg-foreground text-background font-mono text-[10px] p-4 rounded-xl shadow-inner border border-black/10">
+                            <div className="text-accent/60 mb-2">// Package Publish Specification Checklist</div>
+                            <ul className="flex flex-col gap-1.5 list-none pl-0">
+                              {OPEN_SOURCE.breakdown.tasks.map((task, i) => (
+                                <li key={i} className="flex items-center gap-2">
+                                  <span className="text-[#88CE02]">✓</span>
+                                  <span>{task}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <p className="text-[10px] text-accent italic mt-1 leading-normal font-medium">
+                            {OPEN_SOURCE.breakdown.outro}
+                          </p>
+                        </div>
+                      )}
+
+                      {osActiveTab === "impact" && (
+                        <div className="flex flex-col gap-4">
+                          <p className="text-xs text-foreground/80 leading-relaxed">
+                            {OPEN_SOURCE.impact.description}
+                          </p>
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-center">
+                            <div className="bg-surface/50 p-4 rounded-xl border border-white/30 flex flex-col items-center justify-center">
+                              <span className="text-[9px] font-bold text-accent uppercase tracking-wider mb-1">Package</span>
+                              <span className="font-bold text-xs text-foreground mb-0.5">{OPEN_SOURCE.impact.package}</span>
+                            </div>
+                            <div className="bg-surface/50 p-4 rounded-xl border border-white/30 flex flex-col items-center justify-center">
+                              <span className="text-[9px] font-bold text-accent uppercase tracking-wider mb-1">Category</span>
+                              <span className="font-bold text-xs text-foreground mb-0.5">{OPEN_SOURCE.impact.category}</span>
+                            </div>
+                            <div className="bg-surface/50 p-4 rounded-xl border border-white/30 flex flex-col items-center justify-center">
+                              <span className="text-[9px] font-bold text-accent uppercase tracking-wider mb-1">Platform</span>
+                              <span className="font-bold text-xs text-foreground mb-0.5">{OPEN_SOURCE.impact.platform}</span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Action Buttons & Stats Block Grid */}
+                  <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-t border-black/5 pt-6 mt-6">
+                    {/* Action buttons (left) */}
+                    <div className="flex flex-wrap gap-2.5">
+                      <motion.a
+                        whileHover={{ scale: 1.03, y: -1 }}
+                        whileTap={{ scale: 0.98 }}
+                        href={OPEN_SOURCE.links.viewPackage}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 text-[10px] font-bold bg-foreground hover:bg-black text-background px-4 py-2.5 rounded-lg transition-all cursor-pointer shadow-sm hover:shadow-md"
+                      >
+                        View Package
+                      </motion.a>
+                      <motion.a
+                        whileHover={{ scale: 1.03, y: -1 }}
+                        whileTap={{ scale: 0.98 }}
+                        href={OPEN_SOURCE.links.npmRegistry}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 text-[10px] font-bold bg-surface border border-black/5 text-foreground px-4 py-2.5 rounded-lg hover:bg-white hover:border-black/15 transition-all cursor-pointer shadow-sm"
+                      >
+                        npm Registry
+                      </motion.a>
+                      <motion.a
+                        whileHover={{ scale: 1.03, y: -1 }}
+                        whileTap={{ scale: 0.98 }}
+                        href={OPEN_SOURCE.links.documentation}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 text-[10px] font-bold bg-surface border border-black/5 text-foreground px-4 py-2.5 rounded-lg hover:bg-white hover:border-black/15 transition-all cursor-pointer shadow-sm"
+                      >
+                        Documentation
+                      </motion.a>
+                      <motion.a
+                        whileHover={{ scale: 1.03, y: -1 }}
+                        whileTap={{ scale: 0.98 }}
+                        href={OPEN_SOURCE.links.github}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 text-[10px] font-bold bg-surface border border-black/5 text-foreground px-4 py-2.5 rounded-lg hover:bg-white hover:border-black/15 transition-all cursor-pointer shadow-sm"
+                      >
+                        GitHub Repository
+                      </motion.a>
+                    </div>
+
+                    {/* Stats Block (Premium UI) */}
+                    <div className="bg-surface/40 p-4 rounded-xl border border-white/40 flex flex-col gap-1.5 min-w-[220px] text-right">
+                      <span className="text-[8px] font-extrabold text-accent uppercase tracking-wider border-b border-black/5 pb-1 block">
+                        {OPEN_SOURCE.stats.title}
+                      </span>
+                      {OPEN_SOURCE.stats.lines.map((line, i) => (
+                        <span key={i} className="text-[10px] font-bold text-foreground block">
+                          {line}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        </section>
+
         {/* ================= JOURNEY SECTION ================= */}
         <section id="journey" className="scroll-mt-24">
           <motion.div
@@ -538,6 +761,12 @@ export default function HtmlOverlay() {
                   stage: "EXPANSION",
                   title: "TypeScript, AI & 3D Web",
                   desc: "Leveled up to TypeScript and Next.js. Began experimenting with AI integrations using Google Gemini API. Discovered Three.js and React Three Fiber — building immersive 3D web experiences became a passion."
+                },
+                {
+                  year: "2026",
+                  stage: "PUBLISHED AFK MOTION",
+                  title: "Published AFK Motion",
+                  desc: "Successfully designed, developed, documented, and published the open-source package @hemanath-afk/afk-motion, making reusable animation utilities available to the JavaScript developer community."
                 },
                 {
                   year: "2026",
