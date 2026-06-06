@@ -142,22 +142,23 @@ export default function CommandCenter() {
     ];
 
     let currentLogIndex = 0;
+    let progress = 0;
 
     const interval = setInterval(() => {
-      setScanProgress((prev) => {
-        const next = prev + 5;
-        if (next % 15 === 0 && currentLogIndex < logs.length) {
-          setScanLogs((prevLogs) => [...prevLogs, logs[currentLogIndex]]);
+      progress += 5;
+      if (progress >= 100) {
+        clearInterval(interval);
+        setScanProgress(100);
+        setIsScanning(false);
+        setScanLogs((prevLogs) => [...prevLogs, "[✓] CORE DIAGNOSTIC CHECK COMPLETED. SYSTEM OPTIMAL."]);
+      } else {
+        setScanProgress(progress);
+        if (progress % 15 === 0 && currentLogIndex < logs.length) {
+          const logToAppend = logs[currentLogIndex];
+          setScanLogs((prevLogs) => [...prevLogs, logToAppend]);
           currentLogIndex++;
         }
-        if (next >= 100) {
-          clearInterval(interval);
-          setIsScanning(false);
-          setScanLogs((prevLogs) => [...prevLogs, "[✓] CORE DIAGNOSTIC CHECK COMPLETED. SYSTEM OPTIMAL."]);
-          return 100;
-        }
-        return next;
-      });
+      }
     }, 150);
   };
 
@@ -481,7 +482,7 @@ export default function CommandCenter() {
                         {/* Logs */}
                         <div className="flex-1 bg-black/60 border border-white/5 p-4 rounded-xl font-mono text-[10px] overflow-y-auto max-h-[220px] flex flex-col gap-1.5 text-accent">
                           {scanLogs.map((log, idx) => (
-                            <div key={idx} className={log.includes("[✓]") ? "text-[#39FF14] font-bold" : log.includes("[+]") ? "text-white" : ""}>
+                            <div key={idx} className={log && log.includes("[✓]") ? "text-[#39FF14] font-bold" : log && log.includes("[+]") ? "text-white" : ""}>
                               {log}
                             </div>
                           ))}
@@ -516,7 +517,7 @@ export default function CommandCenter() {
                           value={terminalInput}
                           onChange={(e) => setTerminalInput(e.target.value)}
                           placeholder="type 'help' or commands here..."
-                          className="flex-1 bg-black/60 border border-white/10 hover:border-white/20 focus:border-[#39FF14]/40 rounded-lg p-2 font-mono text-xs outline-none text-[#39FF14] placeholder:text-accent/30 shadow-inner"
+                          className="flex-1 bg-black/60 border border-white/10 hover:border-white/20 focus:border-[#39FF14]/40 rounded-lg p-2 font-mono text-xs outline-none text-[#39FF14] caret-[#39FF14] placeholder:text-accent/30 shadow-inner"
                           autoFocus
                         />
                         <button
