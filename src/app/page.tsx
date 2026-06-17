@@ -404,7 +404,7 @@ export default function Home() {
               <motion.a 
                 whileHover={{ scale: 1.04, y: -2 }}
                 whileTap={{ scale: 0.98 }}
-                href="https://drive.google.com/file/d/1OBsu5YqI-MtM9_mYjAG5v7hZ-swcxQGF/view?usp=sharing"
+                href="https://drive.google.com/file/d/1O0q4IPO-6elsqLkK1mrL8ekgtWY1dJai/view?usp=sharing"
                 target="_blank"
                 rel="noreferrer"
                 className="px-4 py-2 bg-surface hover:bg-foreground hover:text-background border border-white/40 hover:border-transparent text-foreground rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer"
