@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Outfit } from "next/font/google";
 import CustomCursor from "@/components/CustomCursor";
 import CommandCenter from "@/components/CommandCenter";
+import SEO from "@/components/SEO";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -11,10 +12,17 @@ const outfit = Outfit({
   display: "swap",
 });
 
+export const viewport: Viewport = {
+  themeColor: "#050505",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://hemanath-afk.vercel.app"),
-  title: "Hemanath S | Full Stack Developer | React, Next.js, Node.js & AI Applications",
-  description: "Official developer portfolio of Hemanath S (Hemanath AFK), a Full Stack MERN Developer, Frontend Engineer, and AI Integration Enthusiast in Puducherry, India. Discover production-grade web systems like QuantumCart, AI-assisted tools like HireAFK, published academic research, and immersive WebGL environments.",
+  title: "Hemanath S | Full Stack Developer & AI Engineer",
+  description: "Official portfolio of Hemanath S (Hemanath AFK). Explore interactive 3D WebGL scenes, full stack MERN systems, and AI applications.",
   keywords: [
     "Hemanath S", "Hemanath AFK", "Full Stack Developer", "MERN Stack Developer", "React Developer", 
     "Next.js Developer", "Node.js Developer", "MongoDB Developer", "Frontend Developer India", 
@@ -27,23 +35,23 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://hemanath-afk.vercel.app",
-    title: "Hemanath S | Full Stack Developer | React, Next.js, Node.js & AI Applications",
-    description: "Official developer portfolio of Hemanath S (Hemanath AFK). Discover MERN stack systems, AI-powered applications, academic publications, and interactive 3D web experiences.",
+    title: "Hemanath S | Full Stack Developer & AI Engineer",
+    description: "Official portfolio of Hemanath S (Hemanath AFK). Explore interactive 3D WebGL scenes, full stack MERN systems, and AI applications.",
     siteName: "Hemanath S Portfolio",
     images: [
       {
-        url: "/opengraph-image.png",
-        width: 1200,
-        height: 630,
+        url: "/icon.png",
+        width: 512,
+        height: 512,
         alt: "Hemanath S | Full Stack Developer Portfolio"
       }
     ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "Hemanath S | Full Stack Developer | React, Next.js, Node.js & AI Applications",
-    description: "Official developer portfolio of Hemanath S (Hemanath AFK). Discover MERN stack systems, AI-powered applications, academic publications, and interactive 3D web experiences.",
-    images: ["/twitter-image.png"],
+    title: "Hemanath S | Full Stack Developer & AI Engineer",
+    description: "Official portfolio of Hemanath S (Hemanath AFK). Explore interactive 3D WebGL scenes, full stack MERN systems, and AI applications.",
+    images: ["/icon.png"],
     creator: "@hemanath_afk"
   },
   robots: {
@@ -73,6 +81,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`h-full scroll-smooth ${outfit.variable}`} data-scroll-behavior="smooth">
       <body className="min-h-full flex flex-col antialiased bg-background">
+        <SEO />
         <CustomCursor />
         <CommandCenter />
         {children}

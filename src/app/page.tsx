@@ -63,135 +63,7 @@ export default function Home() {
   return (
     <Providers>
       <div className="relative min-h-screen bg-background w-full text-foreground">
-        {/* ================= STRUCTURED JSON-LD DATA FOR SEO ================= */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@graph": [
-                {
-                  "@type": "Person",
-                  "@id": "https://hemanath-afk.vercel.app/#person",
-                  "name": "Hemanath S",
-                  "alternateName": "Hemanath AFK",
-                  "jobTitle": "Full Stack Developer",
-                  "email": "hemanathkalai29@gmail.com",
-                  "telephone": "+91 8778246378",
-                  "url": "https://hemanath-afk.vercel.app",
-                  "address": {
-                    "@type": "PostalAddress",
-                    "addressLocality": "Puducherry",
-                    "addressCountry": "India"
-                  },
-                  "sameAs": [
-                    "https://github.com/HEMANATH-AFK",
-                    "https://www.linkedin.com/in/hemanath-afk"
-                  ],
-                  "knowsAbout": [
-                    "Full Stack Development",
-                    "MERN Stack",
-                    "Next.js",
-                    "React.js",
-                    "Three.js",
-                    "WebGL",
-                    "TypeScript",
-                    "Artificial Intelligence",
-                    "REST APIs",
-                    "Software Engineering",
-                    "Creative Development",
-                    "Frontend Engineering",
-                    "Cinematic Web Design",
-                    "Open Source Software",
-                    "JavaScript Animation Library",
-                    "npm Package Publishing"
-                  ],
-                  "alumniOf": {
-                    "@type": "EducationalOrganization",
-                    "name": "Rajiv Gandhi College"
-                  }
-                },
-                {
-                  "@type": "SoftwareSourceCode",
-                  "@id": "https://hemanath-afk.vercel.app/#afk-motion",
-                  "name": "AFK Motion",
-                  "description": "Lightweight JavaScript Animation Library designed to simplify the implementation of smooth UI interactions and motion effects.",
-                  "programmingLanguage": "JavaScript",
-                  "codeRepository": "https://github.com/HEMANATH-AFK/afk-motion",
-                  "runtimePlatform": "Node.js, npm, Web Browsers",
-                  "author": {
-                    "@id": "https://hemanath-afk.vercel.app/#person"
-                  }
-                },
-                {
-                  "@type": "WebSite",
-                  "@id": "https://hemanath-afk.vercel.app/#website",
-                  "url": "https://hemanath-afk.vercel.app",
-                  "name": "Hemanath S | Full Stack Developer | React, Next.js, Node.js & AI Applications",
-                  "description": "Premium interactive developer portfolio showcasing full stack engineering, AI-powered applications, and cinematic 3D web experiences.",
-                  "publisher": {
-                    "@id": "https://hemanath-afk.vercel.app/#person"
-                  },
-                  "potentialAction": {
-                    "@type": "SearchAction",
-                    "target": "https://hemanath-afk.vercel.app/?search={search_term_string}",
-                    "query-input": "required name=search_term_string"
-                  }
-                },
-                {
-                  "@type": "WebPage",
-                  "@id": "https://hemanath-afk.vercel.app/#webpage",
-                  "url": "https://hemanath-afk.vercel.app",
-                  "name": "Hemanath S | Full Stack Developer | React, Next.js, Node.js & AI Applications",
-                  "isPartOf": {
-                    "@id": "https://hemanath-afk.vercel.app/#website"
-                  },
-                  "about": {
-                    "@id": "https://hemanath-afk.vercel.app/#person"
-                  }
-                },
-                {
-                  "@type": "ScholarlyArticle",
-                  "headline": "AI-Powered Smart Recruitment System for Intelligent Candidate Evaluation and Hiring Optimization",
-                  "description": "This research explores the development of an AI-powered smart recruitment platform capable of improving candidate evaluation workflows, intelligent hiring optimization, and scalable recruitment interaction systems.",
-                  "url": "https://rjwave.org/jaafr/viewpaperforall.php?paper=JAAFR2605325",
-                  "sameAs": [
-                    "https://drive.google.com/file/d/1gxamD6-yzWnMuF9EjgyKGcftZ0PVswPI/view",
-                    "https://drive.google.com/file/d/1PI0_iMvEe9n6RplGCgz68-ihsdUjNN-s/view"
-                  ],
-                  "author": {
-                    "@id": "https://hemanath-afk.vercel.app/#person"
-                  },
-                  "publisher": {
-                    "@type": "EducationalOrganization",
-                    "name": "Research Journal of Wave",
-                    "url": "https://rjwave.org"
-                  }
-                },
-                ...[
-                  { slug: "quantumcart", name: "QuantumCart" },
-                  { slug: "hireafk", name: "HireAFK" },
-                  { slug: "projectforge", name: "ProjectForge" },
-                  { slug: "restroafk", name: "RestroAFK" },
-                  { slug: "indjcst-migration", name: "INDJCST Migration" },
-                  { slug: "scirank", name: "SciRank" },
-                  { slug: "railluxury", name: "RailLuxury" },
-                  { slug: "afk-blogspace", name: "AFK BlogSpace" },
-                  { slug: "eclipse-afk", name: "Eclipse AFK" },
-                  { slug: "afk-motion", name: "AFK Motion" }
-                ].map((p) => ({
-                  "@type": "CreativeWork",
-                  "@id": `https://hemanath-afk.vercel.app/${p.slug}#creativework`,
-                  "name": p.name,
-                  "author": {
-                    "@id": "https://hemanath-afk.vercel.app/#person"
-                  },
-                  "url": `https://hemanath-afk.vercel.app/${p.slug}`
-                }))
-              ]
-            })
-          }}
-        />
+
 
         {/* 1. Background Cinematic Image Sequence */}
         <ImageSequencePlayer onLoadComplete={() => { }} />
@@ -386,7 +258,7 @@ export default function Home() {
                 whileTap={{ scale: 0.98 }}
                 href="https://www.linkedin.com/in/hemanath-afk"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="px-4 py-2 bg-surface hover:bg-foreground hover:text-background border border-white/40 hover:border-transparent text-foreground rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer"
               >
                 LinkedIn
@@ -396,7 +268,7 @@ export default function Home() {
                 whileTap={{ scale: 0.98 }}
                 href="https://github.com/hemanath-afk"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="px-4 py-2 bg-surface hover:bg-foreground hover:text-background border border-white/40 hover:border-transparent text-foreground rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer"
               >
                 GitHub
@@ -406,7 +278,7 @@ export default function Home() {
                 whileTap={{ scale: 0.98 }}
                 href="https://drive.google.com/file/d/1O0q4IPO-6elsqLkK1mrL8ekgtWY1dJai/view?usp=sharing"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="px-4 py-2 bg-surface hover:bg-foreground hover:text-background border border-white/40 hover:border-transparent text-foreground rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer"
               >
                 Resume
@@ -431,6 +303,7 @@ export default function Home() {
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
               className="fixed bottom-8 left-6 md:left-16 lg:left-24 w-10 h-10 md:w-11 md:h-11 rounded-full border border-white/50 bg-surface/80 hover:bg-foreground hover:text-background text-foreground flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-300 pointer-events-auto z-50 cursor-pointer"
               title="Scroll to Top"
+              aria-label="Scroll to top"
             >
               <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
                 {/* Arrow Head (Dotted) */}
